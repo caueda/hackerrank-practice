@@ -1,4 +1,5 @@
 hackerrank\BalancedBrackets.class
+hackerrank\LinkedList.class
 hackerrank\AnagramTest.class
 hackerrank\BinarySearch.class
 hackerrank\BubbleSort.class
@@ -10,5 +11,4 @@ hackerrank\Palindrome.class
 hackerrank\CountTriplets.class
 hackerrank\SelectSort.class
 nio\ClientServer.class
-hackerrank\MergeLinkedList.class
 hackerrank\ReverseArray.class
