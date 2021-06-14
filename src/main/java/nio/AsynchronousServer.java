@@ -15,6 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AsynchronousServer {
 	
+	public static final String ECHO = "Echo ";
+	public static final String EXIT = "exit";
+	public static final String CLOSING_CONNECTION_AT = "Closing connection at ";
+
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
 		new AsynchronousServer().initServer();
 	}
@@ -32,15 +36,15 @@ public class AsynchronousServer {
 				readResult.get();
 				String message = new String(buffer.array()).trim();
 				
-				if(message.toLowerCase().contains("exit")) {
-					String closingMsg = "Closing connection at " + new Date();
+				if(message.toLowerCase().contains(EXIT)) {
+					String closingMsg = CLOSING_CONNECTION_AT + new Date();
 					System.out.println(closingMsg);
 					buffer = ByteBuffer.wrap(closingMsg.getBytes());
 					Future<Integer> writeResult = clientChannel.write(buffer);
 					writeResult.get();
 					break;
 				}
-				String msg = "Echo " + message;
+				String msg = ECHO + message;
 				buffer.clear();
 				buffer = ByteBuffer.wrap(msg.getBytes());
 				Future<Integer> writeResult = null;

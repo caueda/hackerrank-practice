@@ -27,15 +27,15 @@ class ClientServerTest {
 	@Order(1)
 	void testSendMessage() throws IOException, InterruptedException {
 		String response = client.sendMessage("123");
-		String expected = "Echo 123";
+		String expected = AsynchronousServer.ECHO + "123";
 		assertThat("testSendMessage", response, equalTo(expected));
 	}
 	
 	@Test
 	@Order(2)
 	void testSendMessage_when_passing_exit_message() throws IOException, InterruptedException {
-		String response = client.sendMessage("exit");
-		String expected = "Closing connection at";
+		String response = client.sendMessage(AsynchronousServer.EXIT);
+		String expected = AsynchronousServer.CLOSING_CONNECTION_AT;
 		assertThat("testSendMessage", response , containsString(expected));
 	}
 }
