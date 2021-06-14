@@ -31,7 +31,6 @@ public class AnagramTest {
 					subList.add(s.substring(j, j+i));
 				}
 			}
-			System.out.println(subList);
 			
 			for(int k=0; k<subList.size(); k++) {
 				for (int l = k + 1; l<subList.size(); l++) {
