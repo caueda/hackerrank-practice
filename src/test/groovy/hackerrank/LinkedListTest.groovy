@@ -5,9 +5,9 @@ import spock.lang.Specification
 class LinkedListTest extends Specification {
 	def "create a new LinkedList from int array" () {
 		given:
-			int[] input =  [1,2,3,4,5,6,7]
+			def input =  [1,2,3,4,5,6,7]
 		when:
-			LinkedList linkedList = new LinkedList(input)
+			def linkedList = new LinkedList(input)
 		then:
 			linkedList.toString() == "1, 2, 3, 4, 5, 6, 7"
 	}
