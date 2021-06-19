@@ -6,6 +6,10 @@ import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
+/*
+	I'm not proud of this code, in the real challenge it didn't work for all tests,
+	unfortunatelly I was running out of time, and I start desperately to make it pass... so it wasn't well designed
+ */
 class SushiOrderManagerTest {
 
 	@Test
