@@ -11,7 +11,7 @@
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<junit-platform.version>5.5.0</junit-platform.version>
+		<junit-platform.version>5.7.0</junit-platform.version>
 		<spock-core.version>2.0-groovy-3.0</spock-core.version>
 		<groovy-all.version>2.4.7</groovy-all.version>
 		<gmavenplus-plugin.version>1.5</gmavenplus-plugin.version>
@@ -49,6 +49,12 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>5.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
