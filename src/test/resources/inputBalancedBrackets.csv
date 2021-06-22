@@ -1,0 +1,6 @@
+Expressions, Value
+[()[]{}], YES
+{([])}, YES
+}][}}(}][))], NO
+{([])}(, NO
+(), YES
