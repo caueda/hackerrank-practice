@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.*;
 
+@Tag("local")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ClientServerTest {
 
