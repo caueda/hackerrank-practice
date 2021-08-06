@@ -1,11 +1,11 @@
 package hackerrank;
 
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 
-import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
-import hackerrank.CountTriplets;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CountTripletsTest {
 
