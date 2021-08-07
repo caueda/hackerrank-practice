@@ -1,10 +1,8 @@
 package hackerrank;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
-import hackerrank.HamsomNote;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HamsomNoteTest {
 

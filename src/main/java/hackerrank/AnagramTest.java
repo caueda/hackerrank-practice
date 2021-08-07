@@ -2,10 +2,6 @@ package hackerrank;
 import java.util.*;
 
 public class AnagramTest {
-	public static void main(String[] args) {
-		System.out.println(sherlockAndAnagrams("cdcd"));
-	}
-	 
 	static boolean isAnagram(String s1, String s2) {
 		int[] charArray1 = new int[26];
 		int[] charArray2 = new int[26];
