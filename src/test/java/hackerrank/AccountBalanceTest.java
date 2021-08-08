@@ -9,19 +9,18 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MinimumNumberTest {
+class AccountBalanceTest {
 
     @ParameterizedTest
     @MethodSource("getSolutionArgs")
-    void solution(int expected, int[] input) {
-        assertEquals(expected, MinimumNumber.solution(input));
+    void solution(int expected, int[] A, String[] D) {
+        assertEquals(expected, new AccountBalance().solution(A, D));
     }
 
     static Stream<Arguments> getSolutionArgs() {
         return Stream.of(
-                Arguments.of(7, new int[]{-1, 1, 3, 6, 4, 2, 5}),
-                Arguments.of(1, new int[]{-1, 3, 6, 4, 2, 5}),
-                Arguments.of(2, new int[]{-1, 1, 3, 6, 4, 5})
+                Arguments.of(-164, new int[]{1, -1, 0, -105, 1}, new String[]{"2020-12-31", "2020-04-04", "2020-04-04", "2020-04-14", "2020-07-12"}),
+                Arguments.of(25, new int[]{180, -50, -25, -25}, new String[]{"2020-01-01", "2020-01-01", "2020-01-01", "2020-01-31"})
         );
     }
 }
