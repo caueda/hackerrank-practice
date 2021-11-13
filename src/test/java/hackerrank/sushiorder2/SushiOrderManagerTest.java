@@ -351,7 +351,7 @@ class SushiOrderManagerTest {
             Arrays.asList(
                 new SushiOrder(1,
                     new ArrayList<>(Arrays.asList(
-                        new String[] {"cucumber"}
+                        new String[] {"cucumber1"}
                     ))
                 )
             )
