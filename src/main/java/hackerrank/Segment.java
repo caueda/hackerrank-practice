@@ -1,7 +1,11 @@
 package hackerrank;
 
+import io.vavr.API;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class Segment {
 	public static int segment(int x, List<Integer> space) {
@@ -26,11 +30,23 @@ public class Segment {
 		return result;
 	}
 
-	public static void main(String[] args) {
-		List<Integer> space = new ArrayList<>();
-		space.add(1);
-		space.add(1000000000);
-		System.out.println(segment(1, space));
+	public static void main(String[] args) throws Exception {
+		CountDownLatch countDownLatch = new CountDownLatch(1);
+		Runnable t = () -> {
+			for(int i=0; i<10; i++) {
+				System.out.printf("i=" + i + "  ");
+				API.unchecked(() -> {
+					TimeUnit.SECONDS.sleep(1);
+					return 0;
+				}).get();
+			}
+			System.out.println("");
+			countDownLatch.countDown();
+		};
+		new Thread(t).start();
+
+		countDownLatch.await();
+		System.out.println("fim");
 	}
 
 }

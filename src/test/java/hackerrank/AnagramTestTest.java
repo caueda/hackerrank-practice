@@ -19,4 +19,9 @@ class AnagramTestTest {
 		int result = AnagramTest.sherlockAndAnagrams("cdcd");
 		assertEquals(5, result);
 	}
+
+	@Test
+	void testIsAnagrama() {
+		assertTrue(AnagramTest.isAnagram("aab", "aba"));
+	}
 }

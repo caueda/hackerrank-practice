@@ -12,8 +12,9 @@ public class AnagramTest {
 		}
 		
 		for(int i=0; i<26; i++) {
-			if(charArray1[i] != charArray2[i]) return false;
+			if (charArray1[i] != charArray2[i]) return false;
 		}
+
 		
 		return true;
 	}
@@ -37,5 +38,30 @@ public class AnagramTest {
 			}
 		}
 		return result;
+	}
+
+	public static int maximumDifference(List<Integer> a) {
+		int maximum = -1;
+		for(int i=0; i<a.size()-2; i++) {
+			for(int j=a.size()-1; j>i ; j--) {
+				if(a.get(i).intValue() < a.get(j).intValue()) {
+					int diff = a.get(j) - a.get(i);
+					if(diff > maximum) maximum = diff;
+				}
+			}
+		}
+		return maximum;
+	}
+
+	public static void main(String[] args) {
+		List<Integer> lista = new ArrayList<>();
+		lista.add(5);
+		lista.add(5);
+		lista.add(4);
+		lista.add(3);
+		lista.add(2);
+		lista.add(1);
+		int result = maximumDifference(lista);
+		System.out.printf(String.valueOf(result));
 	}
 }
