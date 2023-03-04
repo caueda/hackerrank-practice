@@ -47,7 +47,6 @@ public class RXJavaTest {
 
     @Test
     void unsubscribeFromSubscriber() {
-        Observable.
     }
 
     private static Observable getObservable() {
