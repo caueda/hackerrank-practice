@@ -93,6 +93,76 @@ class CsvModifierTest {
         assertEquals("1,,Brazil", CsvModifier.joinCsvLine(new String[]{"1", null, "Brazil"}));
     }
 
+    // -------------------------------------------------------------------
+    // applyUpdateValue
+    // -------------------------------------------------------------------
+
+    @Test
+    void applyUpdateValue_plainValue_stripsQuotes() {
+        assertEquals("Changed", CsvModifier.applyUpdateValue("Original", "'Changed'"));
+    }
+
+    @Test
+    void applyUpdateValue_plainValue_noQuotes() {
+        assertEquals("Changed", CsvModifier.applyUpdateValue("Original", "Changed"));
+    }
+
+    @Test
+    void applyUpdateValue_replaceSubstring_replacesOccurrence() {
+        assertEquals("key: key1,value:value2",
+                CsvModifier.applyUpdateValue("key: key1,value:value1", "replaceSubstring('value1','value2')"));
+    }
+
+    @Test
+    void applyUpdateValue_replaceSubstring_caseInsensitiveKeyword() {
+        assertEquals("key: key1,value:value2",
+                CsvModifier.applyUpdateValue("key: key1,value:value1", "ReplaceSubstring('value1','value2')"));
+    }
+
+    @Test
+    void applyUpdateValue_replaceSubstring_replacesAllOccurrences() {
+        assertEquals("b-b-b",
+                CsvModifier.applyUpdateValue("a-a-a", "replaceSubstring('a','b')"));
+    }
+
+    @Test
+    void applyUpdateValue_replaceSubstring_noMatchLeavesValueUnchanged() {
+        assertEquals("hello", CsvModifier.applyUpdateValue("hello", "replaceSubstring('xyz','abc')"));
+    }
+
+    @Test
+    void applyUpdateValue_replaceSubstring_nullCurrentValueReturnsNull() {
+        assertNull(CsvModifier.applyUpdateValue(null, "replaceSubstring('a','b')"));
+    }
+
+    // -----------------------------------------------------------------------
+    // parseReplaceSubstringArgs
+    // -----------------------------------------------------------------------
+
+    @Test
+    void parseReplaceSubstringArgs_parsesCorrectly() {
+        String[] args = CsvModifier.parseReplaceSubstringArgs("replaceSubstring('value1','value2')");
+        assertArrayEquals(new String[]{"value1", "value2"}, args);
+    }
+
+    @Test
+    void parseReplaceSubstringArgs_withSpaces() {
+        String[] args = CsvModifier.parseReplaceSubstringArgs("replaceSubstring('old val', 'new val')");
+        assertArrayEquals(new String[]{"old val", "new val"}, args);
+    }
+
+    @Test
+    void parseReplaceSubstringArgs_missingParenthesisThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> CsvModifier.parseReplaceSubstringArgs("replaceSubstring'a','b'"));
+    }
+
+    @Test
+    void parseReplaceSubstringArgs_wrongArgCountThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> CsvModifier.parseReplaceSubstringArgs("replaceSubstring('onlyOne')"));
+    }
+
     // -----------------------------------------------------------------------
     // main ? end-to-end via temp file
     // -----------------------------------------------------------------------
@@ -158,6 +228,25 @@ class CsvModifierTest {
         // rows 1 and 3 must be untouched
         assertEquals(ROW1, result.get(1));
         assertEquals(ROW3, result.get(3));
+    }
+
+    @Test
+    void main_replaceSubstring_updatesSubstringInMatchingRows(@TempDir Path tmp) throws IOException {
+        // complement field contains a comma ? it is double-quoted in the CSV
+        String header  = "configName,country,label,quote,complement";
+        String dataRow = "Load_Data1,Brazil,Original,10,\"key: key1,value:value1\"";
+        Path csv = writeCsv(tmp, header, dataRow);
+
+        CsvModifier.main(new String[]{
+                csv.toString(),
+                "configName='Load_Data1',country='Brazil'",
+                "label=Changed,quote='100',complement=replaceSubstring('value1','value2')"
+        });
+
+        List<String> result = Files.readAllLines(csv);
+        assertEquals(2, result.size());
+        assertEquals(header, result.get(0));
+        assertEquals("Load_Data1,Brazil,Changed,100,\"key: key1,value:value2\"", result.get(1));
     }
 
     @Test

@@ -1,5 +1,5 @@
 country,state,company,rate,region,category,business
-Canada,RJ,Company1,35,Local,Energy,Consulting
+Canada,RJ,Company1,35,Locality,Energy,Changed
 Canada,BC,Company2,53,National,Energy,Services
 Brazil,BC,Company3,85,Multi,Energy,Services
 Germany,RJ,Company4,67,International,Healthcare,Consulting

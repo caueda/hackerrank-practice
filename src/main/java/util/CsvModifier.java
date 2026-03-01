@@ -8,10 +8,15 @@ import java.util.*;
  * Usage:
  *   java CsvModifier <csvFilePath> "<col='val',...>" "<col='val',...>"
  *
- * Example:
- *   java CsvModifier c:\temp\config.csv "batchName='Load_Data1',country='Brazil'" "label=Changed,quote='100'"
+ * Example (plain replacement):
+ *   java CsvModifier c:\temp\config.csv "configName='Load_Data1',country='Brazil'" "label=Changed,quote='100'"
+ *
+ * Example (substring replacement):
+ *   java CsvModifier c:\temp\config.csv "configName='Load_Data1',country='Brazil'" "label=Changed,quote='100',complement='replaceSubstring('value1','value2')'"
  *
  * Criteria and update values may optionally be wrapped in single quotes.
+ * Use replaceSubstring('old','new') as an update value to replace a substring
+ * within the existing cell content rather than overwriting the whole cell.
  */
 public class CsvModifier {
 
@@ -79,7 +84,7 @@ public class CsvModifier {
             if (matchesCriteria(fields, colIndex, criteria)) {
                 for (Map.Entry<String, String> update : updates.entrySet()) {
                     int idx = colIndex.get(update.getKey());
-                    fields[idx] = update.getValue();
+                    fields[idx] = applyUpdateValue(fields[idx], update.getValue());
                 }
                 updatedRows++;
             }
@@ -94,6 +99,53 @@ public class CsvModifier {
     // -----------------------------------------------------------------------
     // Helpers
     // -----------------------------------------------------------------------
+
+    /**
+     * Applies an update directive to the current field value.
+     *
+     * If the directive matches  replaceSubstring('oldVal','newVal')  the method
+     * replaces every occurrence of oldVal with newVal inside the existing field.
+     * Otherwise the directive is treated as a plain replacement value.
+     */
+    static String applyUpdateValue(String currentValue, String directive) {
+        String trimmed = directive.trim();
+        if (trimmed.toLowerCase().startsWith("replacesubstring(")) {
+            String[] args = parseReplaceSubstringArgs(trimmed);
+            String oldSub = args[0];
+            String newSub = args[1];
+            return currentValue == null ? null : currentValue.replace(oldSub, newSub);
+        }
+        // Plain replacement – strip surrounding single quotes if present
+        if (trimmed.startsWith("'") && trimmed.endsWith("'") && trimmed.length() >= 2) {
+            return trimmed.substring(1, trimmed.length() - 1);
+        }
+        return trimmed;
+    }
+
+    /**
+     * Extracts the two single-quoted arguments from a replaceSubstring('a','b') directive.
+     * Returns a two-element array: [oldSubstring, newSubstring].
+     */
+    static String[] parseReplaceSubstringArgs(String directive) {
+        // Find content between the outer parentheses
+        int open  = directive.indexOf('(');
+        int close = directive.lastIndexOf(')');
+        if (open < 0 || close < 0 || close <= open) {
+            throw new IllegalArgumentException("Invalid replaceSubstring syntax: " + directive);
+        }
+        String inner = directive.substring(open + 1, close).trim(); // 'value1','value2'
+
+        // Split on the comma that separates the two quoted arguments
+        // Pattern: '<anything>','<anything>'
+        String[] parts = inner.split("',\\s*'");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("replaceSubstring requires exactly 2 arguments: " + directive);
+        }
+        // Strip the remaining leading/trailing single quote from each part
+        String first  = parts[0].startsWith("'") ? parts[0].substring(1) : parts[0];
+        String second = parts[1].endsWith("'")   ? parts[1].substring(0, parts[1].length() - 1) : parts[1];
+        return new String[]{first, second};
+    }
 
     /**
      * Parses a string like: batchName='Load_Data1',country='Brazil'
